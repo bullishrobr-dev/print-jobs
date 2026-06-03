@@ -3,11 +3,13 @@
  */
 
 var QP_STORAGE_KEYS = {
-  SHOP: 'qp_shop',
-  WORKERS: 'qp_workers',
-  EDITOR_STATE: 'qp_editor_state',
-  LANG: 'qp_lang'
+  SHOP: 'qp2_shop',
+  WORKERS: 'qp2_workers',
+  EDITOR_STATE: 'qp2_editor_state',
+  LANG: 'qp2_lang',
+  VERSION: 'qp2_version'
 };
+var QP_DATA_VERSION = '2.0';
 
 var QP_DEFAULT_SHOP = {
   name: '',
@@ -54,7 +56,16 @@ function _qpRemoveRaw(key) {
   }
 }
 
+function _qpCheckVersion() {
+  var v = _qpGetRaw(QP_STORAGE_KEYS.VERSION);
+  if (v !== QP_DATA_VERSION) {
+    _qpSetRaw(QP_STORAGE_KEYS.VERSION, QP_DATA_VERSION);
+    qpResetToDefaults();
+  }
+}
+
 function qpGetShop() {
+  _qpCheckVersion();
   if (_qpMemoryShop) return JSON.parse(JSON.stringify(_qpMemoryShop));
   var raw = _qpGetRaw(QP_STORAGE_KEYS.SHOP);
   if (!raw) {

@@ -149,7 +149,13 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
 
 /* --- Views --- */
 .view { display: none; }
-.view.active { display: block; height: 100%; }
+.view.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
 
 /* --- Templates Grid --- */
 .templates-grid {
