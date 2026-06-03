@@ -9,18 +9,14 @@ var QP_STORAGE_KEYS = {
   LANG: 'qp2_lang',
   VERSION: 'qp2_version'
 };
-var QP_DATA_VERSION = '2.0';
+var QP_DATA_VERSION = '2.2';
 
 var QP_DEFAULT_SHOP = {
   name: '',
   logo: '',
   email: '',
-  phone: '',
-  whatsapp: '',
   locations: [],
-  hours: {
-    mon: '', tue: '', wed: '', thu: '', fri: '', sat: '', sun: ''
-  }
+  hours: { mon: '', tue: '', wed: '', thu: '', fri: '', sat: '', sun: '' }
 };
 
 var QP_DEFAULT_WORKERS = [];
@@ -91,6 +87,7 @@ function qpSetShop(shop) {
 }
 
 function qpGetWorkers() {
+  _qpCheckVersion();
   if (_qpMemoryWorkers) return JSON.parse(JSON.stringify(_qpMemoryWorkers));
   var raw = _qpGetRaw(QP_STORAGE_KEYS.WORKERS);
   if (!raw) {

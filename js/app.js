@@ -309,8 +309,6 @@ function qpRenderSettings() {
 
   document.getElementById('shop-name').value = qpSettingsShop.name;
   document.getElementById('shop-email').value = qpSettingsShop.email;
-  document.getElementById('shop-phone').value = qpSettingsShop.phone;
-  document.getElementById('shop-whatsapp').value = qpSettingsShop.whatsapp;
 
   var logoPreview = document.getElementById('logo-preview');
   if (logoPreview) {
@@ -322,7 +320,7 @@ function qpRenderSettings() {
     }
   }
 
-  ['name', 'email', 'phone', 'whatsapp'].forEach(function(key) {
+  ['name', 'email'].forEach(function(key) {
     var el = document.getElementById('shop-' + key);
     if (el) {
       el.oninput = function(e) {
@@ -348,6 +346,17 @@ function qpRenderSettings() {
         }
       };
       reader.readAsDataURL(file);
+    };
+  }
+  // Clear logo button
+  var clearLogo = document.getElementById('btn-clear-logo');
+  if (clearLogo) {
+    clearLogo.onclick = function() {
+      qpSettingsShop.logo = '';
+      qpSetShop(qpSettingsShop);
+      var preview = document.getElementById('logo-preview');
+      if (preview) preview.style.display = 'none';
+      if (logoInput) logoInput.value = '';
     };
   }
 
