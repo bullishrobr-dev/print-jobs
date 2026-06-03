@@ -266,47 +266,53 @@ function qpDoPrint() {
   iframe.style.border = 'none';
   document.body.appendChild(iframe);
 
+  var css = '';
+  css += 'body{margin:0;padding:0;background:#fff;font-family:\'Courier New\',Courier,monospace;font-size:10px;line-height:1.55;color:#000;text-align:center;}';
+  css += '.receipt{width:80mm;min-height:60px;background:#fff;padding:4mm 3mm;margin:0 auto;box-sizing:border-box;}';
+  css += '.rc-logo{margin-bottom:8px;}.rc-logo img{max-width:55mm;max-height:15mm;}';
+  css += '.rc-brand{font-size:15px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}';
+  css += '.rc-tagline{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:#333;margin-bottom:6px;}';
+  css += '.rc-divider{border-top:1px solid #000;margin:8px 0;}';
+  css += '.rc-divider--double{border-top:3px double #000;margin:10px 0;}';
+  css += '.rc-divider--dotted{border-top:1px dashed #555;margin:8px 0;}';
+  css += '.rc-divider--light{border-top:0.5px solid #888;margin:6px 0;}';
+  css += '.rc-divider--single{border-top:1px solid #000;margin:8px 0;}';
+  css += '.rc-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:3px 0;}';
+  css += '.rc-subtitle{font-size:9px;font-weight:500;letter-spacing:0.5px;color:#222;margin:2px 0 5px;}';
+  css += '.rc-highlight{font-size:12px;font-weight:700;letter-spacing:1px;margin:5px 0;}';
+  css += '.rc-meta{font-size:9px;letter-spacing:0.5px;margin:2px 0;color:#222;}';
+  css += '.rc-center{text-align:center;}';
+  css += '.rc-paragraph{text-align:left;margin:5px 0;}';
+  css += '.rc-paragraph.rc-center{text-align:center;}';
+  css += '.rc-paragraph.rc-small{font-size:8.5px;color:#333;}';
+  css += '.rc-paragraph.rc-cta{font-weight:600;font-size:9px;letter-spacing:0.3px;margin:6px 0;}';
+  css += '.rc-label{font-weight:700;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;margin-top:6px;margin-bottom:2px;color:#222;}';
+  css += '.rc-value{font-size:9.5px;margin-bottom:3px;}';
+  css += '.rc-list{text-align:left;margin:4px 0 4px 16px;padding:0;}';
+  css += '.rc-list li{margin:1.5px 0;}';
+  css += '.rc-worker-name{font-size:11px;font-weight:700;margin:2px 0;}';
+  css += '.rc-worker-contact{font-size:9px;color:#333;margin:1.5px 0;}';
+  css += '.rc-loc-name{font-weight:600;font-size:9.5px;}';
+  css += '.rc-loc-addr{font-size:9px;color:#333;margin-bottom:3px;}';
+  css += '.rc-loc-item{text-align:left;font-size:9px;margin:1.5px 0;}';
+  css += '.rc-hours{margin:3px 0;}';
+  css += '.rc-row{display:flex;justify-content:space-between;font-size:9px;padding:1px 0;}';
+  css += '.rc-error{color:#c00;font-weight:bold;}';
+
   var doc = iframe.contentWindow.document;
   doc.open();
-  doc.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Print</title><style>');
-  doc.write('body{margin:0;padding:0;background:#fff;font-family:\'Courier New\',Courier,monospace;font-size:10.5px;line-height:1.5;color:#000;text-align:center;}');
-  doc.write('.receipt{width:80mm;min-height:60px;background:#fff;padding:4mm 3mm;margin:0 auto;box-sizing:border-box;}');
-  doc.write('.receipt-logo{margin-bottom:6px;}');
-  doc.write('.receipt-logo img{max-width:55mm;max-height:16mm;}');
-  doc.write('.receipt-logo-text{font-size:15px;font-weight:bold;letter-spacing:1px;margin-bottom:6px;}');
-  doc.write('.receipt-divider{border-top:1px solid #000;margin:6px 0;}');
-  doc.write('.receipt-divider.dotted{border-top-style:dashed;}');
-  doc.write('.receipt-headline{font-size:11px;font-weight:bold;letter-spacing:0.5px;margin:3px 0;}');
-  doc.write('.receipt-big{font-size:13px;font-weight:bold;margin:4px 0;}');
-  doc.write('.receipt-line{margin:2px 0;}');
-  doc.write('.receipt-paragraph{text-align:left;margin:4px 0;}');
-  doc.write('.receipt-paragraph.receipt-small{font-size:9.5px;}');
-  doc.write('.receipt-paragraph.receipt-center{text-align:center;}');
-  doc.write('.receipt-label{font-weight:bold;font-size:9.5px;margin-top:4px;text-transform:uppercase;}');
-  doc.write('.receipt-cta{font-weight:bold;font-size:9.5px;}');
-  doc.write('.receipt-list{text-align:left;margin:4px 0 4px 14px;padding:0;}');
-  doc.write('.receipt-list li{margin:1px 0;}');
-  doc.write('.receipt-section{margin:6px 0;text-align:left;}');
-  doc.write('.receipt-hours-row{display:flex;justify-content:space-between;font-size:9.5px;padding:1px 0;}');
-  doc.write('.receipt-error{color:#c00;font-weight:bold;}');
-  doc.write('</style></head><body>');
+  doc.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Print</title><style>' + css + '</style></head><body>');
   doc.write('<div class="receipt">' + receiptHtml + '</div>');
   doc.write('</body></html>');
   doc.close();
 
-  iframe.onload = function() {
+  setTimeout(function() {
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
     setTimeout(function() {
-      iframe.contentWindow.focus();
-      iframe.contentWindow.print();
-      setTimeout(function() {
-        document.body.removeChild(iframe);
-      }, 1000);
-    }, 200);
-  };
-  // Trigger onload manually for some browsers
-  if (doc.readyState === 'complete') {
-    iframe.onload();
-  }
+      if (iframe.parentNode) document.body.removeChild(iframe);
+    }, 2000);
+  }, 300);
 }
 
 /* ============================================
@@ -363,9 +369,11 @@ function qpRenderSettings() {
   qpSettingsWorkers = qpGetWorkers();
 
   document.getElementById('shop-name').value = qpSettingsShop.name;
+  document.getElementById('shop-tagline').value = qpSettingsShop.tagline;
   document.getElementById('shop-email').value = qpSettingsShop.email;
   document.getElementById('shop-phone').value = qpSettingsShop.phone;
   document.getElementById('shop-whatsapp').value = qpSettingsShop.whatsapp;
+  document.getElementById('shop-website').value = qpSettingsShop.website;
 
   var logoPreview = document.getElementById('logo-preview');
   if (logoPreview) {
@@ -377,7 +385,7 @@ function qpRenderSettings() {
     }
   }
 
-  ['name', 'email', 'phone', 'whatsapp'].forEach(function(key) {
+  ['name', 'tagline', 'email', 'phone', 'whatsapp', 'website'].forEach(function(key) {
     var el = document.getElementById('shop-' + key);
     if (el) {
       el.oninput = function(e) {
