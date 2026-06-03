@@ -559,66 +559,28 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
   opacity: 0.4;
 }
 
-/* --- Print Styles --- */
+/* --- Print Styles (fallback for Ctrl+P) --- */
 @media print {
-  @page {
-    margin: 0;
-    size: 80mm auto;
+  @page { margin: 0; }
+  .sidebar, .main-header, .editor-toolbar, .editor-form-panel, .editor-preview-header, .lang-switcher {
+    display: none !important;
   }
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
+  .main-body { padding: 0 !important; }
+  .editor-layout { display: block !important; }
+  .editor-preview-panel {
+    border: none !important;
     width: 80mm !important;
+    margin: 0 auto !important;
+  }
+  .editor-preview-body {
     background: #fff !important;
-    overflow: hidden !important;
-  }
-  body * {
-    visibility: hidden !important;
-  }
-  .receipt-print-wrapper,
-  .receipt-print-wrapper * {
-    visibility: visible !important;
-  }
-  .receipt-print-wrapper {
-    position: static !important;
-    width: 80mm !important;
-    margin: 0 !important;
     padding: 0 !important;
-    background: #fff !important;
-    display: block !important;
-    overflow: visible !important;
   }
   .receipt-preview {
     box-shadow: none !important;
-    border: none !important;
     width: 80mm !important;
-    max-width: 80mm !important;
     margin: 0 !important;
     padding: 3mm 2mm !important;
-    font-size: 10px !important;
-    line-height: 1.4 !important;
-    background: #fff !important;
-    color: #000 !important;
-    page-break-inside: avoid !important;
-  }
-  .receipt-preview * {
-    color: #000 !important;
-    background: transparent !important;
-  }
-  .receipt-logo img {
-    max-width: 55mm !important;
-    max-height: 16mm !important;
-  }
-  /* Hide app chrome */
-  .sidebar, .main-header, .editor-toolbar, .editor-form-panel, .editor-preview-header, .editor-preview-body, .lang-switcher {
-    display: none !important;
-  }
-  .editor-layout, .editor-preview-panel, .main, .main-body {
-    display: block !important;
-    width: 80mm !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
   }
 }
 

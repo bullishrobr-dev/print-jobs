@@ -51,7 +51,8 @@ function qpRenderLogo(shop) {
   return '';
 }
 
-function qpRenderShopFooter(shop) {
+function qpRenderShopFooter(shop, opts) {
+  opts = opts || {};
   var html = '';
   var hasFooter = false;
 
@@ -70,7 +71,17 @@ function qpRenderShopFooter(shop) {
     html += '<div class="receipt-section"><div class="receipt-label">' + qpT('emailLabel') + '</div><div class="receipt-value">' + qpEscapeHtml(shop.email) + '</div></div>';
   }
 
-  if (shop.hours) {
+  if (shop.phone) {
+    hasFooter = true;
+    html += '<div class="receipt-section"><div class="receipt-label">' + qpT('phoneLabel') + '</div><div class="receipt-value">' + qpEscapeHtml(shop.phone) + '</div></div>';
+  }
+
+  if (shop.whatsapp) {
+    hasFooter = true;
+    html += '<div class="receipt-section"><div class="receipt-label">' + qpT('whatsappLabel') + '</div><div class="receipt-value">' + qpEscapeHtml(shop.whatsapp) + '</div></div>';
+  }
+
+  if (opts.showOpeningHours && shop.hours) {
     var days = { mon: qpT('mon'), tue: qpT('tue'), wed: qpT('wed'), thu: qpT('thu'), fri: qpT('fri'), sat: qpT('sat'), sun: qpT('sun') };
     var hoursHtml = '';
     Object.entries(days).forEach(function(entry) {

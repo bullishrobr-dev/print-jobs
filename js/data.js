@@ -9,12 +9,14 @@ var QP_STORAGE_KEYS = {
   LANG: 'qp2_lang',
   VERSION: 'qp2_version'
 };
-var QP_DATA_VERSION = '2.2';
+var QP_DATA_VERSION = '2.3';
 
 var QP_DEFAULT_SHOP = {
   name: '',
   logo: '',
   email: '',
+  phone: '',
+  whatsapp: '',
   locations: [],
   hours: { mon: '', tue: '', wed: '', thu: '', fri: '', sat: '', sun: '' }
 };

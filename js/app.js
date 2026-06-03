@@ -251,7 +251,62 @@ function qpUpdateCustomPreview() {
 }
 
 function qpDoPrint() {
-  window.print();
+  var previewEl = document.getElementById('receipt-preview');
+  if (!previewEl) return;
+  var receiptHtml = previewEl.innerHTML;
+
+  var iframe = document.createElement('iframe');
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '1px';
+  iframe.style.height = '1px';
+  iframe.style.opacity = '0';
+  iframe.style.pointerEvents = 'none';
+  iframe.style.border = 'none';
+  document.body.appendChild(iframe);
+
+  var doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Print</title><style>');
+  doc.write('body{margin:0;padding:0;background:#fff;font-family:\'Courier New\',Courier,monospace;font-size:10.5px;line-height:1.5;color:#000;text-align:center;}');
+  doc.write('.receipt{width:80mm;min-height:60px;background:#fff;padding:4mm 3mm;margin:0 auto;box-sizing:border-box;}');
+  doc.write('.receipt-logo{margin-bottom:6px;}');
+  doc.write('.receipt-logo img{max-width:55mm;max-height:16mm;}');
+  doc.write('.receipt-logo-text{font-size:15px;font-weight:bold;letter-spacing:1px;margin-bottom:6px;}');
+  doc.write('.receipt-divider{border-top:1px solid #000;margin:6px 0;}');
+  doc.write('.receipt-divider.dotted{border-top-style:dashed;}');
+  doc.write('.receipt-headline{font-size:11px;font-weight:bold;letter-spacing:0.5px;margin:3px 0;}');
+  doc.write('.receipt-big{font-size:13px;font-weight:bold;margin:4px 0;}');
+  doc.write('.receipt-line{margin:2px 0;}');
+  doc.write('.receipt-paragraph{text-align:left;margin:4px 0;}');
+  doc.write('.receipt-paragraph.receipt-small{font-size:9.5px;}');
+  doc.write('.receipt-paragraph.receipt-center{text-align:center;}');
+  doc.write('.receipt-label{font-weight:bold;font-size:9.5px;margin-top:4px;text-transform:uppercase;}');
+  doc.write('.receipt-cta{font-weight:bold;font-size:9.5px;}');
+  doc.write('.receipt-list{text-align:left;margin:4px 0 4px 14px;padding:0;}');
+  doc.write('.receipt-list li{margin:1px 0;}');
+  doc.write('.receipt-section{margin:6px 0;text-align:left;}');
+  doc.write('.receipt-hours-row{display:flex;justify-content:space-between;font-size:9.5px;padding:1px 0;}');
+  doc.write('.receipt-error{color:#c00;font-weight:bold;}');
+  doc.write('</style></head><body>');
+  doc.write('<div class="receipt">' + receiptHtml + '</div>');
+  doc.write('</body></html>');
+  doc.close();
+
+  iframe.onload = function() {
+    setTimeout(function() {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+      setTimeout(function() {
+        document.body.removeChild(iframe);
+      }, 1000);
+    }, 200);
+  };
+  // Trigger onload manually for some browsers
+  if (doc.readyState === 'complete') {
+    iframe.onload();
+  }
 }
 
 /* ============================================
@@ -309,6 +364,8 @@ function qpRenderSettings() {
 
   document.getElementById('shop-name').value = qpSettingsShop.name;
   document.getElementById('shop-email').value = qpSettingsShop.email;
+  document.getElementById('shop-phone').value = qpSettingsShop.phone;
+  document.getElementById('shop-whatsapp').value = qpSettingsShop.whatsapp;
 
   var logoPreview = document.getElementById('logo-preview');
   if (logoPreview) {
@@ -320,7 +377,7 @@ function qpRenderSettings() {
     }
   }
 
-  ['name', 'email'].forEach(function(key) {
+  ['name', 'email', 'phone', 'whatsapp'].forEach(function(key) {
     var el = document.getElementById('shop-' + key);
     if (el) {
       el.oninput = function(e) {
