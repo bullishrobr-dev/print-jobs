@@ -457,12 +457,7 @@ function qpRenderCustomTemplate(data, shop, worker) {
   }
   var locs = (shop.locations || []).map(function(l) { return (l.name ? l.name + ' — ' : '') + l.address; }).join('\n');
   content = content.replace(/{locations}/g, qpEscapeHtml(locs));
-  var hoursArr = [];
-  var days = { mon: qpT('mon'), tue: qpT('tue'), wed: qpT('wed'), thu: qpT('thu'), fri: qpT('fri'), sat: qpT('sat'), sun: qpT('sun') };
-  Object.entries(days).forEach(function(e) {
-    if (shop.hours && shop.hours[e[0]]) hoursArr.push(e[1] + ': ' + shop.hours[e[0]]);
-  });
-  content = content.replace(/{hours}/g, qpEscapeHtml(hoursArr.join('\n')));
+  content = content.replace(/{hours}/g, qpEscapeHtml(shop.hours || ''));
   html += rcDivider('single');
   html += '<div class="rc-paragraph">' + qpNl2br(content) + '</div>';
   html += rcDivider('single');

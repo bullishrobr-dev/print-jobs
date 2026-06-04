@@ -20,7 +20,7 @@ var QP_DEFAULT_SHOP = {
   whatsapp: '',
   website: '',
   locations: [],
-  hours: { mon: '', tue: '', wed: '', thu: '', fri: '', sat: '', sun: '' }
+  hours: ''
 };
 
 var QP_DEFAULT_WORKERS = [];
@@ -76,7 +76,17 @@ function qpGetShop() {
     var parsed = JSON.parse(raw);
     var merged = Object.assign({}, QP_DEFAULT_SHOP, parsed);
     merged.locations = parsed.locations || [];
-    merged.hours = Object.assign({}, QP_DEFAULT_SHOP.hours, parsed.hours || {});
+    // Backward compatibility: old format was {mon: '9-5', tue: '9-5', ...}
+    if (parsed.hours && typeof parsed.hours === 'object' && !(parsed.hours instanceof Array)) {
+      var hoursArr = [];
+      var dayNames = {mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun'};
+      for (var k in dayNames) {
+        if (parsed.hours[k]) hoursArr.push(dayNames[k] + ': ' + parsed.hours[k]);
+      }
+      merged.hours = hoursArr.join(', ');
+    } else {
+      merged.hours = parsed.hours || '';
+    }
     _qpMemoryShop = merged;
     return JSON.parse(JSON.stringify(merged));
   } catch {

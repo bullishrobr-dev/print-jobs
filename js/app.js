@@ -416,6 +416,7 @@ function qpRenderSettings() {
   document.getElementById('shop-phone').value = qpSettingsShop.phone;
   document.getElementById('shop-whatsapp').value = qpSettingsShop.whatsapp;
   document.getElementById('shop-website').value = qpSettingsShop.website;
+  document.getElementById('shop-hours').value = qpSettingsShop.hours || '';
 
   var logoPreview = document.getElementById('logo-preview');
   if (logoPreview) {
@@ -427,7 +428,7 @@ function qpRenderSettings() {
     }
   }
 
-  ['name', 'tagline', 'email', 'phone', 'whatsapp', 'website'].forEach(function(key) {
+  ['name', 'tagline', 'email', 'phone', 'whatsapp', 'website', 'hours'].forEach(function(key) {
     var el = document.getElementById('shop-' + key);
     if (el) {
       el.oninput = function(e) {
@@ -523,32 +524,7 @@ function qpAddLocationRow() {
 }
 
 function qpRenderHours() {
-  var container = document.getElementById('hours-grid');
-  if (!container) return;
-  var days = [
-    { key: 'mon', label: qpT('mon') },
-    { key: 'tue', label: qpT('tue') },
-    { key: 'wed', label: qpT('wed') },
-    { key: 'thu', label: qpT('thu') },
-    { key: 'fri', label: qpT('fri') },
-    { key: 'sat', label: qpT('sat') },
-    { key: 'sun', label: qpT('sun') }
-  ];
-  container.innerHTML = '';
-  days.forEach(function(d) {
-    var label = document.createElement('label');
-    label.textContent = d.label;
-    var input = document.createElement('input');
-    input.type = 'text';
-    input.value = qpSettingsShop.hours[d.key] || '';
-    input.placeholder = '09:00 - 18:00';
-    input.oninput = function(e) {
-      qpSettingsShop.hours[d.key] = e.target.value;
-      qpSetShop(qpSettingsShop);
-    };
-    container.appendChild(label);
-    container.appendChild(input);
-  });
+  // Hours is now a single text field — handled in qpRenderSettings
 }
 
 function qpRenderWorkersList() {
