@@ -210,16 +210,18 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
   height: 100%;
   min-height: 0;
 }
-/* When in editor mode, hide sidebar and let main fill width */
-.app.editor-mode .sidebar {
+/* Editor mode: sidebar becomes wider and shows receipt preview */
+.app.editor-mode {
+  --sidebar-width: 340px;
+}
+.app.editor-mode .sidebar-preview {
+  display: flex;
+}
+.app.editor-mode .editor-preview-panel {
   display: none;
 }
-.app.editor-mode .main {
-  width: 100vw;
-}
-/* Swap panels: preview on left, form on right */
-.app.editor-mode .editor-layout {
-  flex-direction: row-reverse;
+.app.editor-mode .editor-form-panel {
+  max-width: none;
 }
 .editor-form-panel {
   flex: 1;
@@ -251,15 +253,47 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
 }
 .editor-preview-panel {
   flex: 0 0 auto;
-  width: 440px;
-  min-width: 400px;
-  max-width: 520px;
+  width: 420px;
+  min-width: 380px;
+  max-width: 480px;
   background: var(--panel-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+/* Sidebar preview (editor mode only) */
+.sidebar-preview {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.sidebar-preview-header {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--sidebar-text);
+  background: rgba(255,255,255,0.03);
+}
+.sidebar-preview-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.sidebar-preview-body .receipt-preview {
+  transform: scale(0.82);
+  transform-origin: top center;
+  margin-bottom: 40px;
 }
 .editor-preview-header {
   padding: 16px 20px;
@@ -279,9 +313,7 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
   background: #e2e8f0;
 }
 .receipt-print-wrapper {
-  transform: scale(1.15);
-  transform-origin: top center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 /* --- Toolbar --- */

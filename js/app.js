@@ -242,6 +242,8 @@ function qpUpdatePreview() {
   var html = qpRenderTemplate(qpCurrentTemplateId, data, shop, worker);
   var previewEl = document.getElementById('receipt-preview');
   if (previewEl) previewEl.innerHTML = html;
+  var sidebarPreviewEl = document.getElementById('sidebar-receipt-preview');
+  if (sidebarPreviewEl) sidebarPreviewEl.innerHTML = html;
 }
 
 function qpUpdateCustomPreview() {
@@ -250,6 +252,8 @@ function qpUpdateCustomPreview() {
   var html = qpRenderCustomTemplate(qpCurrentEditorData, shop, worker);
   var previewEl = document.getElementById('receipt-preview');
   if (previewEl) previewEl.innerHTML = html;
+  var sidebarPreviewEl = document.getElementById('sidebar-receipt-preview');
+  if (sidebarPreviewEl) sidebarPreviewEl.innerHTML = html;
 }
 
 function qpDoPrint() {
