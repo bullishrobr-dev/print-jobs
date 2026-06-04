@@ -175,9 +175,16 @@ function qpSaveEditorState(templateId, data) {
 function qpGetEditorState(templateId) {
   var lang = qpGetLang();
   var all = JSON.parse(_qpGetRaw(QP_STORAGE_KEYS.EDITOR_STATE) || '{}');
-  // Backward compat: old flat format (no language keys)
-  if (all[templateId] && !all.en && !all.es && !all.fr) {
-    return all[templateId] || null;
+  // Detect and migrate old flat format (template IDs as top-level keys)
+  var templateIds = ['discount', 'businesscard', 'facial', 'skincare'];
+  var hasFlatData = templateIds.some(function(id) { return all.hasOwnProperty(id); });
+  if (hasFlatData && !all.en && !all.es && !all.fr) {
+    var old = {};
+    templateIds.forEach(function(id) {
+      if (all.hasOwnProperty(id)) { old[id] = all[id]; delete all[id]; }
+    });
+    all.en = old;
+    _qpSetRaw(QP_STORAGE_KEYS.EDITOR_STATE, JSON.stringify(all));
   }
   if (all[lang] && all[lang][templateId]) {
     return all[lang][templateId] || null;
