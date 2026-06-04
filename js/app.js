@@ -31,6 +31,8 @@ function qpSwitchView(viewName) {
   qpNavLinks.forEach(function(link) {
     link.classList.toggle('active', link.dataset.view === viewName);
   });
+  // Toggle editor-mode class on app container
+  document.querySelector('.app').classList.toggle('editor-mode', viewName === 'editor');
   if (viewName === 'templates') {
     qpPageTitle.textContent = qpT('appName');
     qpPageSubtitle.textContent = qpT('appTagline');
