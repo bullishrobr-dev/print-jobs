@@ -148,7 +148,7 @@ function qpBuildEditorForm(tmpl) {
 
   var toolbar = document.createElement('div');
   toolbar.className = 'editor-toolbar';
-  toolbar.innerHTML = '<button class="btn btn-secondary btn-sm" id="btn-back">&larr; ' + qpT('backToTemplates') + '</button><button class="btn btn-secondary btn-sm" id="btn-reset">' + qpT('resetFields') + '</button><button class="btn btn-primary btn-sm" id="btn-print">' + qpT('print') + '</button><button class="btn btn-primary btn-sm" id="btn-print-thermal" style="margin-left:6px;">' + qpT('printThermal') + '</button>';
+  toolbar.innerHTML = '<button class="btn btn-secondary btn-sm" id="btn-back">&larr; ' + qpT('backToTemplates') + '</button><button class="btn btn-secondary btn-sm" id="btn-reset">' + qpT('resetFields') + '</button><button class="btn btn-primary btn-sm" id="btn-print">' + qpT('print') + '</button>';
   container.appendChild(toolbar);
 
   document.getElementById('btn-back').addEventListener('click', function() { qpSwitchView('templates'); });
@@ -157,8 +157,7 @@ function qpBuildEditorForm(tmpl) {
     qpBuildEditorForm(tmpl);
     qpUpdatePreview();
   });
-  document.getElementById('btn-print').addEventListener('click', qpDoPrint);
-  document.getElementById('btn-print-thermal').addEventListener('click', qpDoPrintThermal);
+  document.getElementById('btn-print').addEventListener('click', qpDoPrintThermal);
 
   tmpl.fields.forEach(function(field) {
     var group = document.createElement('div');
@@ -201,12 +200,11 @@ function qpBuildCustomEditorForm(ct) {
 
   var toolbar = document.createElement('div');
   toolbar.className = 'editor-toolbar';
-  toolbar.innerHTML = '<button class="btn btn-secondary btn-sm" id="btn-back">&larr; ' + qpT('backToTemplates') + '</button><button class="btn btn-primary btn-sm" id="btn-print">' + qpT('print') + '</button><button class="btn btn-primary btn-sm" id="btn-print-thermal" style="margin-left:6px;">' + qpT('printThermal') + '</button>';
+  toolbar.innerHTML = '<button class="btn btn-secondary btn-sm" id="btn-back">&larr; ' + qpT('backToTemplates') + '</button><button class="btn btn-primary btn-sm" id="btn-print">' + qpT('print') + '</button>';
   container.appendChild(toolbar);
 
   document.getElementById('btn-back').addEventListener('click', function() { qpSwitchView('templates'); });
-  document.getElementById('btn-print').addEventListener('click', qpDoPrint);
-  document.getElementById('btn-print-thermal').addEventListener('click', qpDoPrintThermal);
+  document.getElementById('btn-print').addEventListener('click', qpDoPrintThermal);
 
   var group = document.createElement('div');
   group.className = 'form-group';
