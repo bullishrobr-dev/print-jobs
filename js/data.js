@@ -159,14 +159,30 @@ function qpResetToDefaults() {
 }
 
 function qpSaveEditorState(templateId, data) {
+  var lang = qpGetLang();
   var all = JSON.parse(_qpGetRaw(QP_STORAGE_KEYS.EDITOR_STATE) || '{}');
-  all[templateId] = data;
+  // Migrate old flat format if needed
+  if (all[templateId] && !all.en && !all.es && !all.fr) {
+    var old = JSON.parse(JSON.stringify(all));
+    all = {};
+    all[lang] = old;
+  }
+  if (!all[lang]) all[lang] = {};
+  all[lang][templateId] = data;
   _qpSetRaw(QP_STORAGE_KEYS.EDITOR_STATE, JSON.stringify(all));
 }
 
 function qpGetEditorState(templateId) {
+  var lang = qpGetLang();
   var all = JSON.parse(_qpGetRaw(QP_STORAGE_KEYS.EDITOR_STATE) || '{}');
-  return all[templateId] || null;
+  // Backward compat: old flat format (no language keys)
+  if (all[templateId] && !all.en && !all.es && !all.fr) {
+    return all[templateId] || null;
+  }
+  if (all[lang] && all[lang][templateId]) {
+    return all[lang][templateId] || null;
+  }
+  return null;
 }
 
 function qpGetLang() {

@@ -5,7 +5,7 @@
 var qpCurrentView = 'templates';
 var qpCurrentTemplateId = null;
 var qpCurrentEditorData = {};
-var qpCustomTemplates = [];
+// Custom templates removed — only built-in templates
 
 /* ============================================
    DOM REFS
@@ -85,7 +85,7 @@ function qpRenderTemplatesGrid() {
   if (!grid) return;
   grid.innerHTML = '';
 
-  // Built-in templates
+  // Built-in templates only
   Object.keys(QP_TEMPLATES).forEach(function(key) {
     var tmpl = QP_TEMPLATES[key];
     var card = document.createElement('div');
@@ -94,24 +94,6 @@ function qpRenderTemplatesGrid() {
     card.addEventListener('click', function() { qpOpenEditor(tmpl.id); });
     grid.appendChild(card);
   });
-
-  // Custom templates
-  qpCustomTemplates.forEach(function(ct) {
-    var card = document.createElement('div');
-    card.className = 'template-card';
-    card.innerHTML = '<div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><div><h3>' + qpEscapeHtml(ct.name) + '</h3><p>' + qpT('customTemplateDesc') + '</p></div>';
-    card.addEventListener('click', function() { qpOpenCustomEditor(ct.id); });
-    grid.appendChild(card);
-  });
-
-  // Add Custom Template card
-  var addCard = document.createElement('div');
-  addCard.className = 'template-card';
-  addCard.style.borderStyle = 'dashed';
-  addCard.style.borderColor = '#cbd5e1';
-  addCard.innerHTML = '<div class="icon" style="background:#f1f5f9;color:#64748b;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><div><h3>' + qpEscapeHtml(qpT('customTemplate')) + '</h3><p>' + qpEscapeHtml(qpT('customTemplateDesc')) + '</p></div>';
-  addCard.addEventListener('click', qpShowCustomBuilder);
-  grid.appendChild(addCard);
 }
 
 /* ============================================
@@ -127,18 +109,6 @@ function qpOpenEditor(templateId) {
   if (titleEl) titleEl.textContent = qpT(tmpl.nameKey);
   qpBuildEditorForm(tmpl);
   qpUpdatePreview();
-  qpSwitchView('editor');
-}
-
-function qpOpenCustomEditor(templateId) {
-  var ct = qpCustomTemplates.find(function(c) { return c.id === templateId; });
-  if (!ct) return;
-  qpCurrentTemplateId = 'custom_' + templateId;
-  qpCurrentEditorData = { content: ct.content || '' };
-  var titleEl = document.getElementById('editor-form-title');
-  if (titleEl) titleEl.textContent = ct.name;
-  qpBuildCustomEditorForm(ct);
-  qpUpdateCustomPreview();
   qpSwitchView('editor');
 }
 
@@ -195,30 +165,6 @@ function qpBuildEditorForm(tmpl) {
   });
 }
 
-function qpBuildCustomEditorForm(ct) {
-  var container = document.getElementById('editor-form-body');
-  if (!container) return;
-  container.innerHTML = '';
-
-  var toolbar = document.createElement('div');
-  toolbar.className = 'editor-toolbar';
-  toolbar.innerHTML = '<button class="btn btn-secondary btn-sm" id="btn-back">&larr; ' + qpT('backToTemplates') + '</button><button class="btn btn-primary btn-sm" id="btn-print">' + qpT('print') + '</button>';
-  container.appendChild(toolbar);
-
-  document.getElementById('btn-back').addEventListener('click', function() { qpSwitchView('templates'); });
-  document.getElementById('btn-print').addEventListener('click', qpDoPrintThermal);
-
-  var group = document.createElement('div');
-  group.className = 'form-group';
-  group.innerHTML = '<label>' + qpT('customTemplateContent') + '</label><textarea name="custom_content" rows="12">' + qpEscapeHtml(qpCurrentEditorData.content || '') + '</textarea><div class="hint">' + qpT('customTemplateHint') + '</div>';
-  container.appendChild(group);
-
-  container.querySelector('textarea').addEventListener('input', function(e) {
-    qpCurrentEditorData.content = e.target.value;
-    qpUpdateCustomPreview();
-  });
-}
-
 function qpOnEditorInput(e) {
   var el = e.target;
   var key = el.name;
@@ -240,16 +186,6 @@ function qpUpdatePreview() {
   var data = qpBuildTemplateData(qpCurrentTemplateId, qpCurrentEditorData);
   var worker = data.workerId ? qpGetWorkerById(data.workerId) : null;
   var html = qpRenderTemplate(qpCurrentTemplateId, data, shop, worker);
-  var previewEl = document.getElementById('receipt-preview');
-  if (previewEl) previewEl.innerHTML = html;
-  var sidebarPreviewEl = document.getElementById('sidebar-receipt-preview');
-  if (sidebarPreviewEl) sidebarPreviewEl.innerHTML = html;
-}
-
-function qpUpdateCustomPreview() {
-  var shop = qpGetShop();
-  var worker = null;
-  var html = qpRenderCustomTemplate(qpCurrentEditorData, shop, worker);
   var previewEl = document.getElementById('receipt-preview');
   if (previewEl) previewEl.innerHTML = html;
   var sidebarPreviewEl = document.getElementById('sidebar-receipt-preview');
@@ -355,49 +291,6 @@ function qpDoPrintThermal() {
   .catch(function(err) {
     alert('Print server not running. Start start-printer.bat first.');
   });
-}
-
-/* ============================================
-   CUSTOM TEMPLATE BUILDER
-   ============================================ */
-function qpShowCustomBuilder() {
-  qpSwitchView('editor');
-  var container = document.getElementById('editor-form-body');
-  if (!container) return;
-  container.innerHTML = '';
-
-  var titleEl = document.getElementById('editor-form-title');
-  if (titleEl) titleEl.textContent = qpT('customTemplateBuilder');
-
-  var toolbar = document.createElement('div');
-  toolbar.className = 'editor-toolbar';
-  toolbar.innerHTML = '<button class="btn btn-secondary btn-sm" id="btn-back">&larr; ' + qpT('backToTemplates') + '</button>';
-  container.appendChild(toolbar);
-  document.getElementById('btn-back').addEventListener('click', function() { qpSwitchView('templates'); });
-
-  var nameGroup = document.createElement('div');
-  nameGroup.className = 'form-group';
-  nameGroup.innerHTML = '<label>' + qpT('customTemplateName') + '</label><input type="text" id="ct-name">';
-  container.appendChild(nameGroup);
-
-  var contentGroup = document.createElement('div');
-  contentGroup.className = 'form-group';
-  contentGroup.innerHTML = '<label>' + qpT('customTemplateContent') + '</label><textarea id="ct-content" rows="10"></textarea><div class="hint">' + qpT('customTemplateHint') + '</div>';
-  container.appendChild(contentGroup);
-
-  var btn = document.createElement('button');
-  btn.className = 'btn btn-success';
-  btn.textContent = qpT('create');
-  btn.onclick = function() {
-    var name = document.getElementById('ct-name').value.trim();
-    var content = document.getElementById('ct-content').value;
-    if (!name) { alert('Name required'); return; }
-    qpCustomTemplates.push({ id: 'ct' + Date.now(), name: name, content: content });
-    qpSwitchView('templates');
-  };
-  container.appendChild(btn);
-
-  document.getElementById('receipt-preview').innerHTML = '<div class="receipt-preview" style="display:flex;align-items:center;justify-content:center;color:#999;">' + qpT('preview') + '</div>';
 }
 
 /* ============================================

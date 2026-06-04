@@ -432,35 +432,3 @@ function qpRenderTemplate(templateId, data, shop, worker) {
   if (!tmpl) return '<div class="rc-error">Unknown template</div>';
   return tmpl.render(data, shop, worker);
 }
-
-function qpRenderCustomTemplate(data, shop, worker) {
-  var html = rcLogo(shop) + rcTagline(shop);
-  var content = data.content || '';
-  content = content.replace(/{shop_name}/g, qpEscapeHtml(shop.name || ''));
-  content = content.replace(/{shop_tagline}/g, qpEscapeHtml(shop.tagline || ''));
-  content = content.replace(/{shop_email}/g, qpEscapeHtml(shop.email || ''));
-  content = content.replace(/{shop_phone}/g, qpEscapeHtml(shop.phone || ''));
-  content = content.replace(/{shop_whatsapp}/g, qpEscapeHtml(shop.whatsapp || ''));
-  content = content.replace(/{shop_website}/g, qpEscapeHtml(shop.website || ''));
-  if (worker) {
-    content = content.replace(/{worker_name}/g, qpEscapeHtml(worker.name || ''));
-    content = content.replace(/{worker_role}/g, qpEscapeHtml(worker.role || ''));
-    content = content.replace(/{worker_phone}/g, qpEscapeHtml(worker.phone || ''));
-    content = content.replace(/{worker_email}/g, qpEscapeHtml(worker.email || ''));
-    content = content.replace(/{worker_whatsapp}/g, qpEscapeHtml(worker.whatsapp || ''));
-  } else {
-    content = content.replace(/{worker_name}/g, '');
-    content = content.replace(/{worker_role}/g, '');
-    content = content.replace(/{worker_phone}/g, '');
-    content = content.replace(/{worker_email}/g, '');
-    content = content.replace(/{worker_whatsapp}/g, '');
-  }
-  var locs = (shop.locations || []).map(function(l) { return (l.name ? l.name + ' — ' : '') + l.address; }).join('\n');
-  content = content.replace(/{locations}/g, qpEscapeHtml(locs));
-  content = content.replace(/{hours}/g, qpEscapeHtml(shop.hours || ''));
-  html += rcDivider('single');
-  html += '<div class="rc-paragraph">' + qpNl2br(content) + '</div>';
-  html += rcDivider('single');
-  html += rcShopFooter(shop);
-  return html;
-}
