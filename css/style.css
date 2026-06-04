@@ -161,29 +161,29 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
 .templates-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  max-width: 900px;
+  gap: 12px;
+  max-width: 720px;
 }
 .template-card {
   background: var(--panel-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 26px;
+  padding: 14px 16px;
   cursor: pointer;
   transition: var(--transition);
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  gap: 12px;
 }
 .template-card:hover {
   border-color: var(--accent);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 .template-card .icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   background: var(--accent-light);
   color: var(--accent);
   display: flex;
@@ -191,16 +191,16 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
   justify-content: center;
   flex-shrink: 0;
 }
-.template-card .icon svg { width: 22px; height: 22px; }
+.template-card .icon svg { width: 16px; height: 16px; }
 .template-card h3 {
-  font-size: 15.5px;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 3px;
+  margin-bottom: 1px;
 }
 .template-card p {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.35;
 }
 
 /* --- Editor Layout --- */
